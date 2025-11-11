@@ -6,4 +6,13 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.121.1",
+    "optional>=0.0.1",
+    "pydantic>=2.12.4",
+    "pydantic-core>=2.41.5",
+    "uvicorn>=0.38.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "blog",
 ]

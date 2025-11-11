@@ -1,5 +1,7 @@
 from fastapi import FastAPI #Import
 from typing import Optional
+from pydantic import BaseModel
+import uvicorn
 
 app=FastAPI() #Instance
 
@@ -19,7 +21,7 @@ def data(limit=10, published:bool = True, sort:Optional[str] = None):
     else:
         return {'data':f'{limit} blogs from db'}
 
-@app.get('/about/{id}')
+@app.get('/about/{id}/info')
 def id(id:int):
     if int(id)==100:
         return (f"HI Abdul your id is {id}")
@@ -30,3 +32,19 @@ def id(id:int):
 def index(): #Function
     return {'data':{'name':'abdul'}}
 
+
+class Blog(BaseModel):
+    title: str
+    body: str
+    published: Optional[bool] = None
+
+@app.post('/blog')
+def create_blog(blog:Blog):
+    if blog.published:
+        return {"data":f"""Blog is created with title {blog.title} & also published\n
+                   Body is {blog.body} \n
+            """}
+    return {"data":f"""Blog is created with title {blog.title} \n {blog.body}"""}
+
+if __name__ == "__main__":
+    uvicorn.run('main:app', host="0.0.0.0", port=5010, reload=True)
